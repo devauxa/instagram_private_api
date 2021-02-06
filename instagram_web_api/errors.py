@@ -4,8 +4,9 @@
 class ClientError(Exception):
     """Generic error class, catch-all for most client issues.
     """
-    def __init__(self, msg, code=None):
+    def __init__(self, msg, code=None, error_response=None):
         self.code = code or 0
+        self.error_response = error_response
         super(ClientError, self).__init__(msg)
 
     @property
