@@ -285,6 +285,7 @@ class Client(object):
 
         except compat_urllib_error.HTTPError as e:
             msg = 'HTTPError "{0!s}" while opening {1!s}'.format(e.reason, url)
+            self.logger.debug('RES ERROR BODY: {0!s}'.format(e.read()))
             if e.code == 400:
                 raise ClientBadRequestError(msg, e.code, e.read())
             elif e.code == 403:
