@@ -285,13 +285,14 @@ class Client(object):
 
         except compat_urllib_error.HTTPError as e:
             msg = 'HTTPError "{0!s}" while opening {1!s}'.format(e.reason, url)
-            self.logger.debug('RES ERROR BODY: {0!s}'.format(e.read()))
+            error_response = self._read_response(e)
+            self.logger.debug('RES ERROR BODY: {0!s}'.format(error_response))
             if e.code == 400:
-                raise ClientBadRequestError(msg, e.code, e.read())
+                raise ClientBadRequestError(msg, e.code, error_response)
             elif e.code == 403:
-                raise ClientForbiddenError(msg, e.code, e.read())
+                raise ClientForbiddenError(msg, e.code, error_response)
             elif e.code == 429:
-                raise ClientThrottledError(msg, e.code, e.read())
+                raise ClientThrottledError(msg, e.code, error_response)
             raise ClientError(msg, e.code, e.read())
 
         except (SSLError, timeout, SocketError,
