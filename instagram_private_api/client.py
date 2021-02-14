@@ -88,6 +88,7 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
             - **on_login**: Callback after successful login
             - **proxy**: Specify a proxy ex: 'http://127.0.0.1:8888' (ALPHA)
             - **proxy_handler**: Specify your own proxy handler
+            - **authenticate**: Specify if you want to login default is True
         :return:
         """
         self.username = username
@@ -122,6 +123,7 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
         self.application_id = (
             kwargs.pop('application_id', None) or user_settings.get('application_id') or
             self.APPLICATION_ID)
+        self.authenticate = kwargs.pop('authenticate', True)
 
         # to maintain backward compat for user_agent kwarg
         custom_ua = kwargs.pop('user_agent', '') or user_settings.get('user_agent')
@@ -202,13 +204,19 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
             kwargs.pop('ad_id', None) or user_settings.get('ad_id') or
             self.generate_adid())
 
-        if not cookie_string:   # [TODO] There's probably a better way than to depend on cookie_string
+        if not cookie_string and self.authenticate:   # [TODO] There's probably a better way than to depend on cookie_string
             if not self.username or not self.password:
                 raise ClientLoginRequiredError('login_required', code=400)
             self.login()
 
         self.logger.debug('USERAGENT: {0!s}'.format(self.user_agent))
         super(Client, self).__init__()
+
+    @property
+    def is_authenticated(self):
+        if self.authenticated_user_id:
+            return True
+        return False
 
     @property
     def settings(self):
