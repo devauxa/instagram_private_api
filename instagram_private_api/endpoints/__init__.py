@@ -1,5 +1,6 @@
 # flake8: noqa
 from .accounts import AccountsEndpointsMixin
+from .challenge import ChallengeEndpointsMixin
 from .discover import DiscoverEndpointsMixin
 from .feed import FeedEndpointsMixin
 from .friendships import FriendshipsEndpointsMixin

@@ -3,6 +3,7 @@
 from .client import Client
 from .compatpatch import ClientCompatPatch
 from .errors import (
+    ClientTwoFactorRequiredError, ClientTwoFactorCodeInvalid,
     ClientError, ClientLoginError, ClientLoginRequiredError,
     ClientCookieExpiredError, ClientThrottledError, ClientConnectionError,
     ClientCheckpointRequiredError, ClientChallengeRequiredError,

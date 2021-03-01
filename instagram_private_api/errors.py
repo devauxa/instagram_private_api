@@ -59,6 +59,17 @@ class ClientConnectionError(ClientError):
     pass
 
 
+class ClientTwoFactorRequiredError(ClientError):
+    """Raised when two factor authentication required"""
+    pass
+
+
+class ClientTwoFactorCodeInvalid(ClientError):
+    """Raised when two factor code invalid"""
+    pass
+
+
+
 class ClientCheckpointRequiredError(ClientError):
     """Raise when IG detects suspicious activity from your account"""
 
@@ -98,6 +109,7 @@ class ErrorHandler(object):
         {'patterns': ['challenge_required'], 'error': ClientChallengeRequiredError},
         {'patterns': ['sentry_block'], 'error': ClientSentryBlockError},
         {'patterns': ['feedback_required'], 'error': ClientFeedbackRequiredError},
+        {'patterns': ['sms_code_validation_code_invalid'], 'error': ClientTwoFactorCodeInvalid},
     ]
 
     @staticmethod
